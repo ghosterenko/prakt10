@@ -5,31 +5,32 @@
 HANDLE Th1, Th2, Th3, ThLoader;
 
 void increment() {
-    int num = 0;
+    long num = 0;
     int i = 0;
     DWORD thId = GetCurrentThreadId();
     DWORD time1 = GetTickCount64();
     while (true) {
-        std::cout << "Поток ID: " << thId << " - итерации: " << i << " - Инкремент: " << num << std::endl;
+        
         num++;
         i++;
         DWORD time2 = GetTickCount64();
         DWORD time = time2 - time1;
         if (time >= 1000) {
+            std::cout << "Поток ID: " << thId << " - итерации: " << i << " - Инкремент: " << num << std::endl;
             i = 0;
             time1 = GetTickCount64();
         }
+        
         
     }
 }
 
 void fibonacci() {
-    int a = 0, b = 1;
+    long a = 0, b = 1;
     int i = 0;
     DWORD thId = GetCurrentThreadId();
     DWORD time1 = GetTickCount64();
     while (true) {
-        std::cout << "Поток ID: " << thId << " - итерации: " << i << " - Фибоначчи: " << a << std::endl;
         int next = a + b;
         a = b;
         b = next;
@@ -37,6 +38,7 @@ void fibonacci() {
         DWORD time2 = GetTickCount64();
         DWORD time = time2 - time1;
         if (time >= 1000) {
+            std::cout << "Поток ID: " << thId << " - итерации: " << i << " - Фибоначчи: " << a << std::endl;
             i = 0;
             time1 = GetTickCount64();
         }
@@ -44,7 +46,7 @@ void fibonacci() {
 }
 
 void factorial() {
-    int n = 0;
+    long n = 0;
     long fact = 1;
     int i = 0;
     DWORD thId = GetCurrentThreadId();
@@ -59,12 +61,13 @@ void factorial() {
                 fact *= i;
             }
         }
-        std::cout << "Поток ID: " << thId  << " - итерации: " << i << " - Факториал: " << fact << std::endl;
+        
         n++;
         i++;
         DWORD time2 = GetTickCount64();
         DWORD time = time2 - time1;
         if (time >= 1000) {
+            std::cout << "Поток ID: " << thId << " - итерации: " << i << " - Факториал: " << fact << std::endl;
             i = 0;
             time1 = GetTickCount64();
         }
@@ -76,13 +79,22 @@ void Loader() {
     std::cout << "Нагрузчик запущен" << std::endl;
     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
     std::cout << "Максимальный приоритет" << std::endl;
-    int l = 0;
-    for (int i = 0; i < 1000000; i++)
+    long l = 0;
+    int j = 0;
+    DWORD time1 = GetTickCount64();
+    for (int i = 0; i < 10000; i++)
     {
+        std::cout << "Нагрузчик приоритет максимальный - количество итерации - " << j << std::endl;
         l++;
-        Sleep(1);
+        j++;
+        DWORD time2 = GetTickCount64();
+        DWORD time = time2 - time1;
+        if (time >= 1000) {
+            j = 0;
+            time1 = GetTickCount64();
+        }
     }
-    std::cout << "Нормальный приоритет" << std::endl;
+    std::cout << "Нагрузчик приоритет нормальный" << std::endl;
     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_NORMAL);
     Sleep(3000);
 }
