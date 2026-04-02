@@ -79,24 +79,43 @@ void Loader() {
     std::cout << "Нагрузчик запущен" << std::endl;
     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
     std::cout << "Максимальный приоритет" << std::endl;
-    long l = 0;
-    int j = 0;
+    long j = 0;
     DWORD time1 = GetTickCount64();
-    for (int i = 0; i < 10000; i++)
+    DWORD timeB = GetTickCount64();
+    while (true)
     {
-        std::cout << "Нагрузчик приоритет максимальный - количество итерации - " << j << std::endl;
-        l++;
         j++;
         DWORD time2 = GetTickCount64();
         DWORD time = time2 - time1;
+        DWORD timeBB = time2 - timeB;
         if (time >= 1000) {
-            j = 0;
-            time1 = GetTickCount64();
+            if (timeBB >= 10000) {
+                break;
+            }
+            else {
+                std::cout << "Нагрузчик приоритет максимальный - количество итерации - " << j << std::endl;
+                j = 0;
+                time1 = GetTickCount64();
+            }
+            
         }
     }
-    std::cout << "Нагрузчик приоритет нормальный" << std::endl;
     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_NORMAL);
-    Sleep(3000);
+    std::cout << "Нагрузчик приоритет нормальный" << std::endl;
+    DWORD time11 = GetTickCount64();
+    while (true)
+    {
+        j++;
+        DWORD time22 = GetTickCount64();
+        DWORD time = time22 - time11;
+        if (time >= 1000) {
+            std::cout << "Нагрузчик приоритет нормальный - количество итерации - " << j << std::endl;
+            j = 0;
+            time11 = GetTickCount64();
+        }
+    }
+    
+    
 }
 
 int main() {
