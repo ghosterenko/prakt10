@@ -8,12 +8,18 @@ void increment() {
     int num = 0;
     int i = 0;
     DWORD thId = GetCurrentThreadId();
-
+    DWORD time1 = GetTickCount64();
     while (true) {
         std::cout << "Поток ID: " << thId << " - итерации: " << i << " - Инкремент: " << num << std::endl;
         num++;
         i++;
-        Sleep(1000);
+        DWORD time2 = GetTickCount64();
+        DWORD time = time2 - time1;
+        if (time >= 1000) {
+            i = 0;
+            time1 = GetTickCount64();
+        }
+        
     }
 }
 
@@ -21,14 +27,19 @@ void fibonacci() {
     int a = 0, b = 1;
     int i = 0;
     DWORD thId = GetCurrentThreadId();
-
+    DWORD time1 = GetTickCount64();
     while (true) {
         std::cout << "Поток ID: " << thId << " - итерации: " << i << " - Фибоначчи: " << a << std::endl;
         int next = a + b;
         a = b;
         b = next;
         i++;
-        Sleep(1000);
+        DWORD time2 = GetTickCount64();
+        DWORD time = time2 - time1;
+        if (time >= 1000) {
+            i = 0;
+            time1 = GetTickCount64();
+        }
     }
 }
 
@@ -37,7 +48,7 @@ void factorial() {
     long fact = 1;
     int i = 0;
     DWORD thId = GetCurrentThreadId();
-
+    DWORD time1 = GetTickCount64();
     while (true) {
         if (n == 0 || n == 1) {
             fact = 1;
@@ -51,7 +62,12 @@ void factorial() {
         std::cout << "Поток ID: " << thId  << " - итерации: " << i << " - Факториал: " << fact << std::endl;
         n++;
         i++;
-        Sleep(1000);
+        DWORD time2 = GetTickCount64();
+        DWORD time = time2 - time1;
+        if (time >= 1000) {
+            i = 0;
+            time1 = GetTickCount64();
+        }
         
     }
 }
@@ -100,6 +116,7 @@ int main() {
         std::cout << "12. Поток 3 - фоновый приоритет" << std::endl;
 
         std::cout << "13. Поток нагрузчик" << std::endl;
+        std::cout << "0. Выход" << std::endl;
 
         int user;
         std::cin >> user;
@@ -155,6 +172,12 @@ int main() {
         case 13:
             ThLoader = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Loader, NULL, 0, NULL);
             break;
+        case 0:
+            TerminateThread(Th1, 0);
+            TerminateThread(Th2, 0);
+            TerminateThread(Th3, 0);
+            TerminateThread(ThLoader, 0);
+            return 0;
         default:
             std::cout << "Неверно выбранное действие!" << std::endl;
             break;
