@@ -10,7 +10,7 @@ void increment() {
     DWORD thId = GetCurrentThreadId();
 
     while (true) {
-        std::cout << "Поток ID: " << thId << " - Инкремент: " << num << " - i: " << i << std::endl;
+        std::cout << "Поток ID: " << thId << " - итерации: " << i << " - Инкремент: " << num << std::endl;
         num++;
         i++;
         Sleep(1000);
@@ -23,7 +23,7 @@ void fibonacci() {
     DWORD thId = GetCurrentThreadId();
 
     while (true) {
-        std::cout << "Поток ID: " << thId << " - Фибоначчи: " << a << " - i: " << i << std::endl;
+        std::cout << "Поток ID: " << thId << " - итерации: " << i << " - Фибоначчи: " << a << std::endl;
         int next = a + b;
         a = b;
         b = next;
@@ -48,10 +48,11 @@ void factorial() {
                 fact *= i;
             }
         }
-        std::cout << "Поток ID: " << thId << " - Факториал " << n << " = " << fact << " - i: " << i << std::endl;
+        std::cout << "Поток ID: " << thId  << " - итерации: " << i << " - Факториал: " << fact << std::endl;
         n++;
         i++;
         Sleep(1000);
+        
     }
 }
 
@@ -63,6 +64,7 @@ void Loader() {
     for (int i = 0; i < 1000000; i++)
     {
         l++;
+        Sleep(1);
     }
     std::cout << "Нормальный приоритет" << std::endl;
     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_NORMAL);
